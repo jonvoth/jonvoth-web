@@ -1,0 +1,7 @@
+AuthUserFile /home/content/j/o/n/jonnyvoth/html/.htpasswd
+
+AuthGroupFile /home/content/j/o/n/jonnyvoth/html/null
+AuthName "Transfer Area"
+AuthType Basic
+
+require valid-user
