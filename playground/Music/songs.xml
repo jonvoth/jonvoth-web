@@ -1,0 +1,14 @@
+<songs>
+	<song>
+		<path>Music/justJack.mp3</path>
+		<name>Just Jack - I Talk Too Much</name>
+	</song>
+	<song>
+		<path>Music/loveCars.mp3</path>
+		<name>Love Cars - Now We're Even</name>
+	</song>
+	<song>
+		<path>Music/melGibson.mp3</path>
+		<name>Mell Gibson and The Pants - A Mannequin American</name>
+	</song>
+</songs>

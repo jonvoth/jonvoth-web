@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Wedding Guest Book</title>
+		<style>
+			#paintCanvas {
+				position: fixed;
+				top: 0;
+				left: 0;
+			}
+			#liveCanvas {
+				position: fixed;
+				right: 0;
+				bottom: 0;
+			}
+			#live {
+				position:fixed;
+				left: -1000px;
+			}
+			#snapshot,
+			#filmroll {
+				display:none;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="liveCanvas"></canvas>
+		<canvas id="paintCanvas" onclick="snap()"></canvas>
+		<video id="live" autoplay></video>
+		<canvas id="snapshot"></canvas>
+		<div id="filmroll"></div>
+		<script src="js/main.js"></script>
+	</body>
+</html>

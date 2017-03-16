@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>HTML5 Canvas Particles</title>
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="particle.js"></script>
+    <script type="text/javascript" src="canvas_script.js"></script>
+    <script type="text/javascript">
+		jQuery(document).ready(function(){
+			init();
+		});
+	</script>
+    
+    <style type="text/css" media="screen">
+        body { background-color:#000000; margin:0; padding:0; font-family:Helvetica, sans-serif;}
+		h2 {color:#1778E6; position:absolute; z-index:10;}
+    </style>
+</head>
+
+<body>
+
+<canvas id="cnv_stage"></canvas>
+<h2 id="title" style="top:0px; left:10px;">HTML5 Color Canvas</h2>
+<h2 id="output" style="bottom:10px; left:10px;"></h2>
+
+</body>
+</html>

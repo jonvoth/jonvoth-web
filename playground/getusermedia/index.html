@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <title>HTML5 Photo Booth</title>
+  </head>
+  <body>
+    <h2>HTML5 Photo Booth</h2>
+
+    <video id="live" autoplay></video>
+    <canvas id="liveCanvas"></canvas>
+    
+    <canvas id="snapshot" style="display:none"></canvas>
+
+    <p><a href="#" onclick="snap()">Take a picture!</a></p>
+    <div id="filmroll"></div>
+
+    <script type="text/javascript">	
+		window.requestAnimFrame = (function(){
+			return  window.requestAnimationFrame       || 
+			      	window.webkitRequestAnimationFrame || 
+			     	window.mozRequestAnimationFrame    || 
+			      	window.oRequestAnimationFrame      || 
+			      	window.msRequestAnimationFrame     || 
+			      	function( callback ){
+			        	window.setTimeout(callback, 1000 / 60);
+			      	};
+		})();
+    	
+		function cameraSuccess(stream){
+			live = document.getElementById("live");
+			live.src = window.webkitURL.createObjectURL(stream);
+			draw();
+		}
+		
+		function cameraError(err){
+			alert("Unable to get video stream!");
+		}
+		
+		function draw() {
+			live = document.getElementById("live");
+			liveCanvas = document.getElementById("liveCanvas");
+			liveCanvas.width = live.clientWidth;
+			liveCanvas.height = live.clientHeight;
+						
+			ctx = liveCanvas.getContext("2d");
+			ctx.save();
+			ctx.globalAlpha = 0.5;
+			ctx.scale(-1, 1);
+			ctx.translate(liveCanvas.width * -1, 0);
+			ctx.drawImage(live, 0, 0, liveCanvas.width, liveCanvas.height);
+			ctx.restore();
+		}
+
+		function snap() {
+			live = document.getElementById("live");
+			snapshot = document.getElementById("snapshot");
+			filmroll = document.getElementById("filmroll");
+			
+			// Make the canvas the same size as the live video
+			snapshot.width = live.clientWidth;
+			snapshot.height = live.clientHeight;
+			
+			// Draw a frame of the live video onto the canvas
+			c = snapshot.getContext("2d");
+			c.drawImage(live, 0, 0, snapshot.width, snapshot.height);
+			
+			// Create an image element with the canvas image data
+			img = document.createElement("img");
+			img.src = snapshot.toDataURL("image/png");
+			img.style.padding = 5;
+			img.width = snapshot.width / 2;
+			img.height = snapshot.height / 2;
+			
+			// Add the new image to the film roll
+			filmroll.appendChild(img);
+		}
+		
+		//Get it started
+		if(navigator.webkitGetUserMedia){
+			navigator.webkitGetUserMedia({video:true, audio:false}, cameraSuccess,cameraError);
+		}else if(navigator.GetUserMedia){
+			navigator.GetUserMedia({video:true, audio:false}, cameraSuccess,cameraError);
+		}
+		
+		(function animloop(){
+			requestAnimFrame(animloop);
+			draw();
+		})();
+    </script>
+  </body>
+</html>

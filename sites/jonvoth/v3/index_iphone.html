@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <title>Jon Voth</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=320,initial-scale=1.0,user-scalable=true,minimum-scale=0.5,maximum-scale=1.5" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        
+		<style type="text/css" media="screen">
+            html, body { height:480px; width:320px; }
+            body { background-color:#000000; margin:0; padding:0; overflow:hidden; color:#666666; font-family:Helvetica, sans-serif; font-size:medium; }
+			p { font-size:small;}
+            h1 {font-size:large;}
+            h2 {font-size:medium; margin-bottom:-12px; margin-top:24px;}
+            a:link { text-decoration:none; cursor:pointer; }
+            a:visited { text-decoration:none; cursor:pointer;}
+            a:hover { text-decoration:underline; cursor:pointer;}
+            a:active { text-decoration:underline; cursor:pointer;}
+            
+            #top { width:100%; border-bottom:#666 solid 1px; float:left; margin-bottom:20px; }
+			#mainContent { clear:left; margin-left:15px; margin-bottom:20px; }
+			#bottom { margin-left:15px; }
+			
+            #work { color:#E6C617;}
+            #resume { color:#1778E6;}
+            #contact { color:#E64817;}
+            
+            .small { font-size:small;}
+			.title { float:left; margin:5px 0px 5px 15px; font-size:large; font-weight:bold; }
+			.nav { float:right; font-size:small; font-weight:bold; margin:10px 15px 5px 0px;}
+            .gray {color:#666666;}
+            .yellow {color:#E6C617;}
+            .blue {color:#1778E6;}
+            .red {color:#E64817;}
+        </style>
+        
+        <script language="javascript" type="text/javascript">
+		<!--
+			var isLoadError;
+			var htmlWork;
+			var htmlResume;
+			var htmlContact;
+			
+			function init(){
+				loadSection('html_work.html', 'htmlWork');
+				loadSection("html_resume.html", 'htmlResume');
+				loadSection("html_contact.html", 'htmlContact');
+			}
+			
+			function loadSection(url, varName) {
+				var req;
+				
+				if (window.XMLHttpRequest) {
+					req = new XMLHttpRequest();
+				} else if (window.ActiveXObject) {
+					req = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				if (req != undefined) {
+					req.onreadystatechange = function() {setHtmlVar(req, varName)};
+					req.open('GET', url, true);
+					req.send(null);
+				}
+			}
+			
+			function setHtmlVar(req, varName){
+				if (req.readyState == 4) {
+					if (req.status == 200) {
+						isLoadError = false;
+					
+						switch(varName){
+							case 'htmlWork':
+								htmlWork = req.responseText;
+								switchSection("work");
+							break;
+							case 'htmlResume':
+								htmlResume = req.responseText;
+							break;
+							case 'htmlContact':
+								htmlContact = req.responseText;
+							break;
+						}
+					} else {
+						isLoadError = true;
+					}
+				}
+			}
+			
+			function switchSection(target) {
+				var thisHtml;
+				
+				if(isLoadError){
+					thisHtml = "Error loading content.";
+				}else{
+					switch(target){
+						case 'work':
+							thisHtml = htmlWork;
+						break;
+						case 'resume':
+							thisHtml = htmlResume;
+						break;
+						case 'contact':
+							thisHtml = htmlContact;
+						break;
+					}
+				}
+				
+				document.getElementById("mainContent").innerHTML = thisHtml;
+			}
+		//-->
+		</script>
+    </head>
+
+    <body onload="init()">
+    
+       <div id="top">
+            <div class="title">Jon Voth <span class="small">
+            <br/>[web specialist]</span></div>
+            <div class="nav">
+            	<a class="yellow" onclick="switchSection('work');">Work</a>&nbsp;&nbsp;
+                <a class="blue" onclick="switchSection('resume');">Resume</a>&nbsp;&nbsp;
+                <a class="red" onclick="switchSection('contact');">Contact</a>
+            </div>
+        </div>
+        
+        <div id="mainContent">
+        	
+        </div>
+
+        <div id="bottom" class="small">
+            >> <a class="gray" href="http://www.adobe.com/go/getflashplayer" target="_blank">To see Flash version, get Flash 9 here</a>.
+        </div>
+        
+    </body>
+</html>
