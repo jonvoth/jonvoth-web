@@ -257,6 +257,95 @@ body {
 }
 
 
+/*--------------------------*/
+/*-- Alcolytics Dashboard --*/
+/*--------------------------*/
+
+.alcolytics-dashboard-body {
+	background-color: #000;
+}
+
+.alcolytics-dashboard-container {
+	color: #ccc;
+	margin: 0 auto;
+	max-width: 30em;
+	padding: 0.5em 1em;
+}
+
+.alcolytics-dashboard-container h1 {
+	/* border-bottom: 0.25rem solid #ccc; */
+	font-size: 2em;
+	text-align: center;
+	width: 100%;
+}
+
+.alcolytics-dashboard-container h2 {
+	font-size: 1.5em;
+}
+
+.averages-display-container {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 0.75em;
+	margin-top: 0.75remem;
+}
+
+.averages-display-container h2 {
+	grid-column: 1 / 1;
+	grid-row: 1;
+}
+
+.average-display {
+	background-color: #ccc;
+	border: 0.25rem solid #ccc;
+	border-radius: 0.5rem;
+	color: #000;
+	grid-row: 2;
+	padding: 0.5rem 0;
+	text-align: center;
+}
+
+.average-display.goal-on {
+	background-color: green;
+}
+
+.average-display.goal-medium {
+	background-color: orange;
+}
+
+.average-display.goal-high {
+	background-color: red;
+}
+
+.average-display h3 {
+	font-size: 0.75em;
+}
+
+.average-display p {
+	font-size: 2em;
+	margin: 0;
+}
+
+.drink-log-container {
+	margin-top: 1em;
+}
+
+.drink-log-table {
+	font-size: 0.75em;
+	width: 100%;
+}
+.drink-log-table thead {
+	border-bottom: 0.125rem solid #ccc;
+}
+.drink-log-table th {
+	text-align: left;
+}
+
+
+/*----------*/
+/*-- Misc --*/
+/*----------*/
+
 .ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; *line-height: 0; }
 .ir br { display: none; }
 .hidden { display: none !important; visibility: hidden; }
