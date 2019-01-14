@@ -86,14 +86,24 @@
 			}
 
 			//Calculate 7-day average
-			let trimmed7DayData = rawData.slice(0,Math.ceil(rawData.length / 2)); //TODO: get only items from last 7 days
+			let date7DaysAgo = new Date();
+			date7DaysAgo.setDate(date7DaysAgo.getDate() - 7);
+			let trimmed7DayData = rawData.filter(function(value){
+				console.log('7', value.timestamp, date7DaysAgo.getTime());
+				return value.timestamp < date7DaysAgo.getTime();
+			});
 			let average7Day = getAverageForData(trimmed7DayData);
 			document.getElementById('average_7_days').classList.add(getClassNameForAverage(average7Day));
 			document.getElementById('average_7_days_value').innerHTML = average7Day;
 
 			//Calculate 30-day average
-			let trimmed30DayData = rawData.slice(Math.ceil(rawData.length / 2)); //TODO: get only items from last 30 days
-			let average30Day = 22;
+			let date30DaysAgo = new Date();
+			date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
+			let trimmed30DayData = rawData.filter(function(value){
+				console.log('30', value.timestamp, date30DaysAgo.getTime());
+				return value.timestamp < date30DaysAgo.getTime();
+			});
+			let average30Day = getAverageForData(trimmed30DayData);
 			document.getElementById('average_30_days').classList.add(getClassNameForAverage(average30Day));
 			document.getElementById('average_30_days_value').innerHTML = average30Day;
 
