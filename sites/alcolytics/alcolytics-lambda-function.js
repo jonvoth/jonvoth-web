@@ -1,36 +1,40 @@
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient({ region: 'us-east-1' });
+const tableName = 'alcolytics-drinks';
 
 exports.handler = async (event) => {
    if(event.context){
       if (event.context['resource-path'] === '/drinks') {
          if (event.context['http-method'] === 'GET') {
-            //TODO: Return drink data for specified user ID and time period
-            let userId = event['body-json'].userId;
-            //TODO: syntax in queryParams object isn't working
+            let userId = event['params'].querystring.userId;
+            let startTime = event['params'].querystring.startTime || 0;
+            let endTime = event['params'].querystring.endTime || 999999999999999;
             let queryParams = {
-               TableName: "alcolytics-drinks",
-               KeyConditionExpression: "#uid = :uid",
+               TableName: tableName,
+               KeyConditionExpression: "#uid = :uid AND #time BETWEEN :starttime AND :endtime",
                ExpressionAttributeNames: {
-                "#uid": "userId"
+                "#uid": "userId",
+                "#time": "timestamp"
                },
                ExpressionAttributeValues: {
-                ":uid": userId
+                ":uid": userId,
+                ":starttime": startTime,
+                ":endtime": endTime
                }
             }
             
             return new Promise((resolve, reject) => {
                docClient.query(queryParams, function(err, data) {
-                    if (err) {
+                   if (err) {
                         return reject({
                            "error": err
                         });
-                    } else {
-                       return resolve({
-                           "success": "Values successfully retrieved",
+                   } else {
+                        return resolve({
+                           "success": "Data successfully retrieved",
                            "data": data.Items
                         });
-                    }
+                   }
                 });
             });
             
@@ -43,7 +47,6 @@ exports.handler = async (event) => {
             let timestamp = Date.now();
             let drinkDataPoint = {
                "userId": userId,
-               "drinkId": String(userId + "-" + timestamp),
                "abv": rawAbv,
                "volume": rawVolume,
                "gramsOfAlcohol": gramsOfAlcohol,
@@ -52,8 +55,8 @@ exports.handler = async (event) => {
             
             return new Promise((resolve, reject) => {
                docClient.put({
-                   "TableName": "alcolytics-drinks",
-                   "Item": drinkDataPoint
+                   TableName: tableName,
+                   Item: drinkDataPoint
                 }, function(err, data) {
                     if (err) {
                         return reject({
@@ -68,15 +71,12 @@ exports.handler = async (event) => {
                 });
             });
          }else{
-            //TODO: Return error message
             return {"error": "Valid http method not found"}
          }
       }else{
-         //TODO: Return error message
          return {"error": "Valid resource path not found"}
       }
    }else{
-      //TODO: Return error message
       return {"error": "event.context not found"}
    }
 };
