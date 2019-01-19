@@ -14,7 +14,7 @@
 </head>
 <body class="alcolytics-dashboard-body">
 	<div id="alcolytics_dashboard" class="alcolytics-dashboard-container">
-		<h1>Drink Dashboard</h1>
+		<h1 id="main_heading">Drink Dashboard</h1>
 		<section id="averages" class="averages-display-container">
 			<div id="average_7_days" class="average-display">
 				<h3>7 Days</h3>
@@ -56,11 +56,12 @@
 				return 0;
 			});
 			let tableBodyElement = document.getElementById('drink_log_table_body');
-			var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-			for(let i = 0; i < 5; i+= 1){
+			let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+			let limit = Math.min(5, rawData.length);
+			for(let i = 0; i < limit; i+= 1){
 				let thisRowElement = document.createElement('tr');
 				let thisTimestampDate = new Date(rawData[i].timestamp);
-				let thisFormattedTimestamp = monthNames[thisTimestampDate.getMonth()] + ' ' + thisTimestampDate.getDay() + ', ' + thisTimestampDate.getHours() + ':' + thisTimestampDate.getMinutes();
+				let thisFormattedTimestamp = monthNames[thisTimestampDate.getMonth()] + ' ' + thisTimestampDate.getDate() + ', ' + thisTimestampDate.getHours() + ':' + thisTimestampDate.getMinutes();
 				thisRowElement.innerHTML = '<td>'+thisFormattedTimestamp+'</td><td>'+rawData[i].volume+'</td><td>'+rawData[i].abv+'</td>';
 				tableBodyElement.appendChild(thisRowElement);
 			}
@@ -89,8 +90,7 @@
 			let date7DaysAgo = new Date();
 			date7DaysAgo.setDate(date7DaysAgo.getDate() - 7);
 			let trimmed7DayData = rawData.filter(function(value){
-				console.log('7', value.timestamp, date7DaysAgo.getTime());
-				return value.timestamp < date7DaysAgo.getTime();
+				return value.timestamp > date7DaysAgo.getTime();
 			});
 			let average7Day = getAverageForData(trimmed7DayData);
 			document.getElementById('average_7_days').classList.add(getClassNameForAverage(average7Day));
@@ -100,8 +100,7 @@
 			let date30DaysAgo = new Date();
 			date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
 			let trimmed30DayData = rawData.filter(function(value){
-				console.log('30', value.timestamp, date30DaysAgo.getTime());
-				return value.timestamp < date30DaysAgo.getTime();
+				return value.timestamp > date30DaysAgo.getTime();
 			});
 			let average30Day = getAverageForData(trimmed30DayData);
 			document.getElementById('average_30_days').classList.add(getClassNameForAverage(average30Day));
@@ -113,57 +112,39 @@
 			document.getElementById('average_all_time_value').innerHTML = averageAllTime;
 		}
 
-		let dataFromAPI = [
-			{
-				timestamp: 1547166879050,
-				abv: 7,
-				volume: 16,
-				gramsOfAlcohol: 26.141459836800003
-			},
-			{
-				timestamp: 1547166879051,
-				abv: 7,
-				volume: 16,
-				gramsOfAlcohol: 6.141459836800003
-			},
-			{
-				timestamp: 1547166879052,
-				abv: 40,
-				volume: 2,
-				gramsOfAlcohol: 18.672471312000003
-			},
-			{
-				timestamp: 1547166879053,
-				abv: 7,
-				volume: 16,
-				gramsOfAlcohol: 26.141459836800003
-			},
-			{
-				timestamp: 1547166879054,
-				abv: 40,
-				volume: 2,
-				gramsOfAlcohol: 10.672471312000003
-			},
-			{
-				timestamp: 1547166879055,
-				abv: 7,
-				volume: 16,
-				gramsOfAlcohol: 8.141459836800003
-			}
-		];
+		function displayError(errorMessage){
+			document.getElementById('averages').style.display = 'none';
+			document.getElementById('drink_log').style.display = 'none';
+			document.getElementById('main_heading').innerHTML = errorMessage;
+		}
+
 		let goalHigh = 20;
 		let goalMed = 10;
-		populateDisplay(dataFromAPI);
+		
+		function init(){
+			let urlParams = new URLSearchParams(window.location.search);
+			let userId = urlParams.get('user');
 
-		// fetch('https://dpgfzar9we.execute-api.us-east-1.amazonaws.com/prod/drinks?userId=jonvoth').then(function(response) {
-		// 	// Your code for handling the data you get from the API
-		// 	console.log('response', response);
-		// }).catch(function() {
-		// 	// This is where you run code if the server returns any errors
-		// });
-
-		//TODO: request data from API using query string params of userId, startTime, endTime
-		//https://dpgfzar9we.execute-api.us-east-1.amazonaws.com/prod
+			if(userId){
+				fetch('https://dpgfzar9we.execute-api.us-east-1.amazonaws.com/prod/drinks?userId='+userId, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					}
+				})
+				.then(response => response.json())
+				.then(responseJson => {
+					populateDisplay(responseJson.data);
+				})
+				.catch(function(error){
+					console.log('Error fetching data:', error);
+					displayError('An error has ocurred. Please refresh to try again.');
+				});
+			}else{
+				displayError('Please include a user ID in the URL.');
+			}
+		}
+		init();
 	</script>
 </body>
 </html>
