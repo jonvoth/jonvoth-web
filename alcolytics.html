@@ -42,6 +42,8 @@
 				<tbody id="drink_log_table_body"></tbody>
 			</table>
 		</section>
+
+		<!-- TODO: get target number of standard drinks per week from user and set in JS -->
 	</div>
 
 	<script>
@@ -57,29 +59,36 @@
 			});
 			let tableBodyElement = document.getElementById('drink_log_table_body');
 			let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-			let limit = Math.min(5, rawData.length);
+			let limit = Math.min(10, rawData.length);
 			for(let i = 0; i < limit; i+= 1){
 				let thisRowElement = document.createElement('tr');
 				let thisTimestampDate = new Date(rawData[i].timestamp);
 				let thisFormattedTimestamp = monthNames[thisTimestampDate.getMonth()] + ' ' + thisTimestampDate.getDate() + ', ' + thisTimestampDate.getHours() + ':' + thisTimestampDate.getMinutes();
-				thisRowElement.innerHTML = '<td>'+thisFormattedTimestamp+'</td><td>'+rawData[i].volume+'</td><td>'+rawData[i].abv+'</td>';
+				thisRowElement.innerHTML = '<td>'+thisFormattedTimestamp+'</td><td>'+rawData[i].abv+'</td><td>'+rawData[i].volume+'</td>';
 				tableBodyElement.appendChild(thisRowElement);
 			}
 
 			//Calculte averages
 			function getAverageForData(dataArray){
-				let count = dataArray.length;
-				let total = 0;
-				for(let i = 0; i < count; i += 1){
-					total += dataArray[i].gramsOfAlcohol;
+				let earliestRecord = dataArray[0];
+				let recordCount = dataArray.length;
+				let totalGramsOfAlcohol = 0;
+				for(let i = 0; i < recordCount; i += 1){
+					if(earliestRecord.timestamp > dataArray[i].timestamp){
+						earliestRecord = dataArray[i];
+					}
+					totalGramsOfAlcohol += dataArray[i].gramsOfAlcohol;
 				}
-				return Math.round(total/count);
+				let today = new Date();
+				let daysSinceEarliestRecord = Math.ceil((today.getTime() - earliestRecord.timestamp) / 86400000);
+				let totalStandardDrinks = totalGramsOfAlcohol / gramsOfAlcoholInStandardDrink;
+				return Math.round((totalStandardDrinks/daysSinceEarliestRecord) * 7);
 			}
 
 			function getClassNameForAverage(averageValue){
 				if(averageValue >= goalHigh){
 					return 'goal-high';
-				} else if(averageValue > goalMed && averageValue < goalHigh){
+				} else if(averageValue > goalOn && averageValue < goalHigh){
 					return 'goal-medium';
 				} else {
 					return 'goal-on';
@@ -118,9 +127,10 @@
 			document.getElementById('main_heading').innerHTML = errorMessage;
 		}
 
-		let goalHigh = 20;
-		let goalMed = 10;
-		
+		let gramsOfAlcoholInStandardDrink = 14;
+		let goalOn = 10;
+		let goalHigh = goalOn * 2;
+				
 		function init(){
 			let urlParams = new URLSearchParams(window.location.search);
 			let userId = urlParams.get('user');
