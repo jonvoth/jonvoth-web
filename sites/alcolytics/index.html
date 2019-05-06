@@ -1,0 +1,177 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Drink Tracker Dashboard</title>
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="description" content="Alcohol tracking application">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<link href='//fonts.googleapis.com/css?family=Josefin+Slab:600' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="style.css">
+	<link rel="icon" href="favicon.ico">
+
+	<link rel="manifest" href="manifest.json">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="Alcolytics">
+	<link rel="apple-touch-icon" href="icon-512x512.png">
+	<meta name="theme-color" content="#000000"/>
+</head>
+<body class="alcolytics-dashboard-body">
+	<div id="alcolytics_dashboard" class="alcolytics-dashboard-container">
+		<h1 id="main_heading">Drink Dashboard</h1>
+		<section id="averages" class="averages-display-container">
+			<div id="average_7_days" class="average-display">
+				<h3>7 Days</h3>
+				<p id="average_7_days_value">?</p>
+			</div>
+			<div id="average_30_days" class="average-display">
+				<h3>30 Days</h3>
+				<p id="average_30_days_value">?</p>
+			</div>
+			<div id="average_all_time" class="average-display">
+				<h3>All Time</h3>
+				<p id="average_all_time_value">?</p>
+			</div>
+		</section>
+		<section id="drink_log" class="drink-log-container">
+			<h2>Recent Drinks</h2>
+			<table class="drink-log-table">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>ABV</th>
+						<th>Volume</th>
+					</tr>
+				</thead>
+				<tbody id="drink_log_table_body"></tbody>
+			</table>
+		</section>
+
+		<!-- TODO: get target number of standard drinks per week from user and set in JS -->
+	</div>
+
+	<script>
+		function populateDisplay(rawData){
+			//Populate recent drinks table
+			rawData.sort(function(a,b){
+				if(a.timestamp > b.timestamp){
+					return -1;
+				}else if(b.timestamp > a.timestamp){
+					return 1;
+				}
+				return 0;
+			});
+			let tableBodyElement = document.getElementById('drink_log_table_body');
+			let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+			let limit = Math.min(10, rawData.length);
+			for(let i = 0; i < limit; i+= 1){
+				let thisRowElement = document.createElement('tr');
+				let thisTimestampDate = new Date(rawData[i].timestamp);
+				let thisFormattedTimestamp = monthNames[thisTimestampDate.getMonth()] + ' ' + thisTimestampDate.getDate() + ', ' + thisTimestampDate.getHours() + ':' + thisTimestampDate.getMinutes();
+				thisRowElement.innerHTML = '<td>'+thisFormattedTimestamp+'</td><td>'+rawData[i].abv+'</td><td>'+rawData[i].volume+'</td>';
+				tableBodyElement.appendChild(thisRowElement);
+			}
+
+			//Calculte averages
+			function getAverageForData(dataArray){
+				let earliestRecord = dataArray[0];
+				let recordCount = dataArray.length;
+				let totalGramsOfAlcohol = 0;
+				for(let i = 0; i < recordCount; i += 1){
+					if(earliestRecord.timestamp > dataArray[i].timestamp){
+						earliestRecord = dataArray[i];
+					}
+					totalGramsOfAlcohol += dataArray[i].gramsOfAlcohol;
+				}
+				let today = new Date();
+				let daysSinceEarliestRecord = Math.ceil((today.getTime() - earliestRecord.timestamp) / 86400000);
+				let totalStandardDrinks = totalGramsOfAlcohol / gramsOfAlcoholInStandardDrink;
+				return Math.round((totalStandardDrinks/daysSinceEarliestRecord) * 7);
+			}
+
+			function getClassNameForAverage(averageValue){
+				if(averageValue >= goalHigh){
+					return 'goal-high';
+				} else if(averageValue > goalOn && averageValue < goalHigh){
+					return 'goal-medium';
+				} else {
+					return 'goal-on';
+				}
+			}
+
+			//Calculate 7-day average
+			let date7DaysAgo = new Date();
+			date7DaysAgo.setDate(date7DaysAgo.getDate() - 7);
+			let trimmed7DayData = rawData.filter(function(value){
+				return value.timestamp > date7DaysAgo.getTime();
+			});
+			let average7Day = getAverageForData(trimmed7DayData);
+			document.getElementById('average_7_days').classList.add(getClassNameForAverage(average7Day));
+			document.getElementById('average_7_days_value').innerHTML = average7Day;
+
+			//Calculate 30-day average
+			let date30DaysAgo = new Date();
+			date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
+			let trimmed30DayData = rawData.filter(function(value){
+				return value.timestamp > date30DaysAgo.getTime();
+			});
+			let average30Day = getAverageForData(trimmed30DayData);
+			document.getElementById('average_30_days').classList.add(getClassNameForAverage(average30Day));
+			document.getElementById('average_30_days_value').innerHTML = average30Day;
+
+			//Calculate all time average
+			let averageAllTime = getAverageForData(rawData);
+			document.getElementById('average_all_time').classList.add(getClassNameForAverage(averageAllTime));
+			document.getElementById('average_all_time_value').innerHTML = averageAllTime;
+		}
+
+		function displayError(errorMessage){
+			document.getElementById('averages').style.display = 'none';
+			document.getElementById('drink_log').style.display = 'none';
+			document.getElementById('main_heading').innerHTML = errorMessage;
+		}
+
+		let gramsOfAlcoholInStandardDrink = 14;
+		let goalOn = 10;
+		let goalHigh = goalOn * 2;
+				
+		function init(){
+			let urlParams = new URLSearchParams(window.location.search);
+			let userId = urlParams.get('user');
+
+			if(userId){
+				fetch('https://dpgfzar9we.execute-api.us-east-1.amazonaws.com/prod/drinks?userId='+userId, {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					}
+				})
+				.then(response => response.json())
+				.then(responseJson => {
+					populateDisplay(responseJson.data);
+				})
+				.catch(function(error){
+					console.log('Error fetching data:', error);
+					displayError('An error has ocurred. Please refresh to try again.');
+				});
+			}else{
+				displayError('Please include a user ID in the URL.');
+			}
+
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', () => {
+					navigator.serviceWorker.register('service-worker.js')
+						.then((reg) => {
+						console.log('Service worker registered.', reg);
+						});
+				});
+			}
+		}
+		init();
+	</script>
+</body>
+</html>
