@@ -1,0 +1,12 @@
+{
+    "name": "jon-voth-web",
+    "description": "Personal website of Jon Voth",
+    "url": "jonvoth.com",
+    "private": true,
+    "devDependencies": {
+        "http-server": "^0.11.1"
+    },
+    "scripts": {
+        "start": "http-server"
+    }
+}
