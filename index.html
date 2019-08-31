@@ -3,33 +3,186 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Jon Voth</title>
 	<meta name="description" content="Jon Voth">
 	<meta name="keywords" content="interactive, web, development, Minneapolis, Minnesota, Jon Voth" />
-	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	
-	<link href='//fonts.googleapis.com/css?family=Josefin+Slab:600' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/style.css">
+	<title>Jon Voth</title>
+
+	<link rel="stylesheet" href="css/non-critical.css" media="print" onload="this.media='screen'">
 	<link rel="icon" href="favicon.ico">
+
+	<style>
+		/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+		html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}template{display:none}[hidden]{display:none}
+		
+		/* Critical CSS for JonVoth.com */
+		html,
+		body {
+			color: #333;
+			font-family: Helvetica, Arial, sans-serif;
+			font-size: 14px;
+		}
+		body {
+			padding: 2rem;
+		}
+		a:link,
+		a:active,
+		a:visited {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover {
+			color: #e3551d;
+		}
+		h2 {
+			border-bottom: #999 solid 0.2em;
+			color: #999;
+			font-size: 3rem;
+		}
+		header, 
+		main {
+			min-width: 17.7777777778rem;
+			max-width: 53.3333333333rem;
+			margin: 0 auto;
+		}
+		header {
+			background: white;
+			display: grid;
+			grid-auto-flow: column;
+			/* position: fixed;
+			left: 0;
+			top: 0;
+			right: 0;
+			padding: 1rem 2rem 0.5rem 2rem; FOR FIXED HEADER */
+		}
+		header img {
+			max-width: 4rem;
+		}
+		nav {
+			text-align: right;
+		}
+		nav a {
+			font-size: 1.25rem;
+			font-weight: bold;
+			padding: 0 0.25em;
+		}
+		nav a:last-child {
+			padding-right: 0;
+		}
+		#about {
+			padding-top: 2rem;
+			/* padding-top: 6rem; FOR FIXED HEADER*/ 
+		}
+		#about p {
+			font-size: 3rem;
+			font-weight: bold;
+			line-height: 1.25em;
+			margin-top: 0;
+		}
+		#about .phrase {
+			opacity: 0;
+			transition: opacity 0.5s;
+		}
+		#about .phrase.in {
+			opacity: 1;
+		}
+		#about .in .highlight {
+			transition: color 0.3s;
+			transition-delay: 0.6s;
+			color: #e3551d;
+		}
+		#about .in .highlight.two {
+			transition-delay: 0.90s;
+		}
+
+		#contact {
+			padding-top: 2rem;
+		}
+		#contact p {
+			font-size: 2rem;
+			font-weight: bold;
+		}
+		#contact a {
+			color: transparent;
+			text-shadow: 0 0 #333, .08em 0 0 #fff, 0 0, -.08em 0 0 #fff;
+			background: -webkit-linear-gradient(#999, #999) center 1.09em no-repeat;
+			background: linear-gradient(#999, #999) center 1.09em no-repeat;
+		}
+
+		footer {
+			margin-top: 4rem;
+		}
+
+		@media only screen and (min-width: 480px) {  
+			html,
+			body {
+				font-size: 18px;
+			}
+			#about p {
+				font-size: 4rem;
+			}
+		}
+	</style>
 </head>
-<body>	
-	<div id="container_main" role="main">
-		<section id="container_about">
-			<article class="clearfix">
-				<img alt="Jon Voth - Logo" src="img/logo.png" />
-				<p>I thrive in the space between creative and technology, bringing big ideas to life with technical solutions.</p>
-				<p>Over more than 10 years in the creative and marketing industries I have helped guide projects from creative ideation to technical execution, thinking about the big picture while focusing on the details.</p>
-				<p>I am as comfortable communicating technical concepts to clients or managing a team of developers as I am coding a web application or prototyping user interaction designs.</p>
-				<div id="resume_container">
-					<a href="https://www.linkedin.com/in/jonvoth">View Experience on LinkedIn</a>
-				</div>
-			</article>
+<body>
+	<header>
+		<img alt="Jon Voth - Logo" src="img/logo.png" />
+		<!-- TODO: convert to SVG -->
+		<!-- <nav>
+			<a href="#about">About</a>
+			<a href="#work">Work</a>
+			<a href="#contact">Contact</a>
+		</nav> FOR FIXED HEADER -->
+	</header>
+	<main>
+		<section id="about">
+			<!-- <h1></h1> -->
+			<p><span class="phrase">I thrive in the space between <span class="highlight one">creative</span> and <span class="highlight two">technology</span>,</span> <span class="phrase">bringing big ideas to life with technical solutions.</span></p>
+			<p><span class="phrase">Over more than 10 years in the creative and marketing industries</span> <span class="phrase">I have helped guide projects from creative <span class="highlight one">ideation</span> to technical <span class="highlight two">execution</span>,</span> <span class="phrase">thinking about the big picture while focusing on the details.</span></p>
+			<p><span class="phrase">I am as comfortable <span class="highlight one">communicating</span> technical concepts to clients or <span class="highlight two">managing</span> a team of developers</span> <span class="phrase">as I am <span class="highlight one">coding</span> a web application or <span class="highlight two">prototyping</span> user interaction designs.</span></p>
+		</section>
+		<!-- <section id="work">
+			<h2>Work</h2>
+		</section> -->
+		<section id="contact">
+			<h2>Get in touch.</h2>
+			<p>E-mail me at <a href="mailto:jonvoth@gmail.com">jonvoth@gmail.com</a>.</p>
+			<p>View my experience or connect on <a href="https://www.linkedin.com/in/jonvoth">LinkedIn</a>.</p>
+			<p>Check out what I'm reading on my <a href="https://twitter.com/jonvothtweets">Twitter</a> feed.</p>
 		</section>
 		<footer>
 			<div class="left">&copy; Jon Voth <script>document.write(new Date().getFullYear())</script></div>
 		</footer>
-	</div>
+	</main>
+
+	<script>
+		// TODO: critical JS
+		// TODO: peek fixed header on scroll
+		var checkPhrasePositions = function (){
+			document.querySelectorAll('.phrase').forEach(element => {
+				var bounding = element.getBoundingClientRect();
+				var viewportBottom = (window.innerHeight || document.documentElement.clientHeight);
+				if(bounding.bottom <= viewportBottom * 0.85){
+					element.classList.add('in');
+				}
+			});
+		}
+		document.addEventListener("DOMContentLoaded", function(){
+			window.onscroll = function() {
+				checkPhrasePositions();
+			};
+			checkPhrasePositions();
+		});
+	</script>
+	<noscript>
+		<style>
+			#about .phrase {
+				opacity: 1;
+				transition: all 0s;
+			}
+		</style>
+	</noscript>
 	
 	<script>
 		var _gaq=[['_setAccount','UA-33307208-1'],['_trackPageview']];
